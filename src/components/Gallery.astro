@@ -1,0 +1,151 @@
+---
+import { siteContent } from '../content/site';
+const { gallery } = siteContent;
+---
+
+<section id="gallery" class="relative">
+  <div
+    class="relative overflow-hidden"
+    data-carousel
+    aria-roledescription="carousel"
+    aria-label="Project gallery"
+  >
+    <div
+      class="flex snap-x snap-mandatory overflow-x-auto md:overflow-hidden scroll-smooth"
+      data-track
+      style="scrollbar-width: none; -ms-overflow-style: none;"
+    >
+      {
+        gallery.map((img, i) => (
+          <div
+            class="relative shrink-0 w-full snap-center"
+            data-slide
+            aria-roledescription="slide"
+            aria-label={`Slide ${i + 1} of ${gallery.length}`}
+          >
+            <div class="aspect-[16/9] md:aspect-[21/9] lg:aspect-[21/8] w-full">
+              <img
+                src={img.src}
+                alt={img.alt}
+                class="h-full w-full object-cover"
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            </div>
+            <div
+              class="absolute inset-0 pointer-events-none"
+              style="background: linear-gradient(180deg, rgba(10,10,10,0.15) 0%, rgba(10,10,10,0.05) 50%, rgba(10,10,10,0.4) 100%);"
+            ></div>
+          </div>
+        ))
+      }
+    </div>
+
+    <button
+      type="button"
+      class="hidden md:flex absolute top-1/2 left-4 lg:left-8 -translate-y-1/2 items-center justify-center h-12 w-12 border border-ivory/30 hover:border-ivory bg-background/40 hover:bg-background/60 text-ivory transition-colors"
+      data-prev
+      aria-label="Previous slide"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <button
+      type="button"
+      class="hidden md:flex absolute top-1/2 right-4 lg:right-8 -translate-y-1/2 items-center justify-center h-12 w-12 border border-ivory/30 hover:border-ivory bg-background/40 hover:bg-background/60 text-ivory transition-colors"
+      data-next
+      aria-label="Next slide"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2" data-dots>
+      {
+        gallery.map((_, i) => (
+          <button
+            type="button"
+            class="h-1.5 w-6 bg-ivory/30 hover:bg-ivory/60 transition-colors"
+            data-dot={i}
+            aria-label={`Go to slide ${i + 1}`}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  [data-track]::-webkit-scrollbar { display: none; }
+</style>
+
+<script>
+  const carousel = document.querySelector('[data-carousel]');
+  if (carousel) {
+    const track = carousel.querySelector('[data-track]') as HTMLElement;
+    const slides = Array.from(carousel.querySelectorAll('[data-slide]')) as HTMLElement[];
+    const prev = carousel.querySelector('[data-prev]') as HTMLButtonElement;
+    const next = carousel.querySelector('[data-next]') as HTMLButtonElement;
+    const dots = Array.from(carousel.querySelectorAll('[data-dot]')) as HTMLButtonElement[];
+    let current = 0;
+    let autoplayTimer: number | undefined;
+    const AUTOPLAY_MS = 6000;
+
+    function goTo(i: number, behavior: ScrollBehavior = 'smooth') {
+      if (!track || slides.length === 0) return;
+      current = ((i % slides.length) + slides.length) % slides.length;
+      const slideWidth = slides[0].getBoundingClientRect().width;
+      track.scrollTo({ left: slideWidth * current, behavior });
+      updateDots();
+    }
+
+    function updateDots() {
+      dots.forEach((d, i) => {
+        if (i === current) {
+          d.classList.add('bg-ivory');
+          d.classList.remove('bg-ivory/30');
+        } else {
+          d.classList.remove('bg-ivory');
+          d.classList.add('bg-ivory/30');
+        }
+      });
+    }
+
+    function startAutoplay() {
+      stopAutoplay();
+      if (window.matchMedia('(min-width: 768px)').matches) {
+        autoplayTimer = window.setInterval(() => goTo(current + 1), AUTOPLAY_MS);
+      }
+    }
+    function stopAutoplay() {
+      if (autoplayTimer) {
+        window.clearInterval(autoplayTimer);
+        autoplayTimer = undefined;
+      }
+    }
+
+    prev?.addEventListener('click', () => { goTo(current - 1); startAutoplay(); });
+    next?.addEventListener('click', () => { goTo(current + 1); startAutoplay(); });
+    dots.forEach((d, i) => d.addEventListener('click', () => { goTo(i); startAutoplay(); }));
+
+    carousel.addEventListener('mouseenter', stopAutoplay);
+    carousel.addEventListener('mouseleave', startAutoplay);
+    carousel.addEventListener('focusin', stopAutoplay);
+    carousel.addEventListener('focusout', startAutoplay);
+
+    // Sync current index on manual scroll (mobile swipe)
+    let scrollTimeout: number | undefined;
+    track?.addEventListener('scroll', () => {
+      if (scrollTimeout) window.clearTimeout(scrollTimeout);
+      scrollTimeout = window.setTimeout(() => {
+        if (!slides[0]) return;
+        const slideWidth = slides[0].getBoundingClientRect().width;
+        current = Math.round(track.scrollLeft / slideWidth);
+        updateDots();
+      }, 80);
+    });
+
+    window.addEventListener('resize', () => goTo(current, 'auto'));
+
+    goTo(0, 'auto');
+    startAutoplay();
+  }
+</script>

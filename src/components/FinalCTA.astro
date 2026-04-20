@@ -1,0 +1,34 @@
+---
+import { siteContent } from '../content/site';
+const { finalCTA } = siteContent;
+---
+
+<section id="final-cta" class="relative">
+  <div class="relative min-h-[60vh] md:min-h-[70vh] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 -z-10">
+      <img
+        src={finalCTA.backgroundImage}
+        alt=""
+        class="h-full w-full object-cover"
+        loading="lazy"
+        decoding="async"
+      />
+      <div
+        class="absolute inset-0"
+        style="background: linear-gradient(180deg, rgba(10,10,10,0.5) 0%, rgba(10,10,10,0.7) 100%);"
+      ></div>
+    </div>
+
+    <div class="container-edge text-center py-24 md:py-32">
+      <h2 class="headline headline-section max-w-3xl mx-auto">
+        {finalCTA.headline}
+      </h2>
+      <p class="body-copy mt-6 max-w-xl mx-auto text-ivory/80">
+        {finalCTA.subhead}
+      </p>
+      <div class="mt-10">
+        <a href={finalCTA.ctaHref} class="btn-primary">{finalCTA.ctaText}</a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,40 @@
+---
+import { siteContent } from '../content/site';
+const { philosophy } = siteContent;
+---
+
+<section id="philosophy" class="section">
+  <div class="container-edge grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+    <div class="grid grid-cols-2 gap-4 md:gap-6 order-2 md:order-1">
+      <div class="aspect-[3/4] overflow-hidden">
+        <img
+          src={philosophy.images[0]}
+          alt=""
+          class="h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <div class="aspect-[3/4] overflow-hidden mt-8 md:mt-12">
+        <img
+          src={philosophy.images[1]}
+          alt=""
+          class="h-full w-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+
+    <div class="order-1 md:order-2 max-w-xl">
+      <p class="eyebrow eyebrow-divider">{philosophy.eyebrow}</p>
+      <h2 class="headline headline-section mt-8">{philosophy.headline}</h2>
+      <div class="mt-6 space-y-4">
+        {philosophy.body.map((para) => <p class="body-copy">{para}</p>)}
+      </div>
+      <div class="mt-10">
+        <a href={philosophy.ctaHref} class="btn-primary">{philosophy.ctaText}</a>
+      </div>
+    </div>
+  </div>
+</section>

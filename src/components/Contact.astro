@@ -1,0 +1,95 @@
+---
+import { siteContent } from '../content/site';
+const { contact, business } = siteContent;
+---
+
+<section id="contact" class="section">
+  <div class="container-edge grid md:grid-cols-2 gap-12 md:gap-16">
+    <div class="max-w-md">
+      <p class="eyebrow eyebrow-divider">{contact.eyebrow}</p>
+      <h2 class="headline headline-section mt-8">{contact.headline}</h2>
+      <p class="body-copy mt-6">{contact.subhead}</p>
+
+      <div class="mt-10 space-y-4">
+        <div>
+          <p class="eyebrow">Phone</p>
+          <a
+            href={`tel:${business.phone.replace(/[^0-9+]/g, '')}`}
+            class="font-body text-lg text-ivory hover:text-brass transition-colors mt-1 inline-block"
+          >
+            {business.phone}
+          </a>
+        </div>
+        <div>
+          <p class="eyebrow">Email</p>
+          <a
+            href={`mailto:${business.email}`}
+            class="font-body text-lg text-ivory hover:text-brass transition-colors mt-1 inline-block"
+          >
+            {business.email}
+          </a>
+        </div>
+        <div>
+          <p class="eyebrow">Service area</p>
+          <p class="font-body text-base text-muted mt-1">{business.serviceArea}</p>
+        </div>
+      </div>
+    </div>
+
+    {/*
+      FORM NOTE FOR THE OWNER:
+      The form below uses a `mailto:` action as a v1 placeholder — submitting will
+      open the user's email app with the form data pre-filled.
+
+      When you're ready for a real backend, swap this in two places:
+
+      1. In `src/content/site.ts`, change `contact.formEndpoint` to a Formspree URL
+         like "https://formspree.io/f/XXXXXXXX".
+      2. In this file, change `method="POST"` (already set) and remove the
+         `enctype="text/plain"` attribute below.
+
+      Formspree setup: https://formspree.io/ → create a new form → copy the endpoint URL.
+    */}
+    <form
+      action={contact.formEndpoint}
+      method="POST"
+      enctype="text/plain"
+      class="space-y-6"
+    >
+      <div>
+        <label for="name" class="form-label">Name</label>
+        <input id="name" name="Name" type="text" required class="form-input" />
+      </div>
+      <div class="grid sm:grid-cols-2 gap-6">
+        <div>
+          <label for="email" class="form-label">Email</label>
+          <input id="email" name="Email" type="email" required class="form-input" />
+        </div>
+        <div>
+          <label for="phone" class="form-label">Phone</label>
+          <input id="phone" name="Phone" type="tel" class="form-input" />
+        </div>
+      </div>
+      <div>
+        <label for="address" class="form-label">Address</label>
+        <input id="address" name="Address" type="text" class="form-input" />
+      </div>
+      <div>
+        <label for="project-type" class="form-label">Project type</label>
+        <select id="project-type" name="Project Type" class="form-select" required>
+          <option value="">Choose one</option>
+          {contact.projectTypes.map((t) => <option value={t}>{t}</option>)}
+        </select>
+      </div>
+      <div>
+        <label for="message" class="form-label">Message</label>
+        <textarea id="message" name="Message" rows="4" class="form-textarea"></textarea>
+      </div>
+      <div class="pt-2">
+        <button type="submit" class="btn-primary w-full sm:w-auto">
+          Request a Consultation
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,67 @@
+---
+import { siteContent } from '../content/site';
+const { hero } = siteContent;
+---
+
+<section
+  id="hero"
+  class="relative min-h-[100svh] flex items-center justify-center overflow-hidden"
+>
+  <div class="absolute inset-0 -z-10">
+    <img
+      src={hero.backgroundImage}
+      alt=""
+      class="h-full w-full object-cover"
+      loading="eager"
+      decoding="async"
+      fetchpriority="high"
+    />
+    <div
+      class="absolute inset-0"
+      style="background: linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.35) 35%, rgba(10,10,10,0.75) 100%);"
+    >
+    </div>
+  </div>
+
+  <div class="container-edge relative text-center pt-32 pb-20">
+    <p class="eyebrow eyebrow-divider">{hero.eyebrow}</p>
+    <h1 class="headline headline-hero mt-8 max-w-4xl mx-auto">
+      {hero.headline}
+    </h1>
+    <p class="body-copy mt-6 max-w-xl mx-auto text-ivory/80">
+      {hero.subhead}
+    </p>
+    <div class="mt-10">
+      <a href={hero.ctaHref} class="btn-primary">{hero.ctaText}</a>
+    </div>
+  </div>
+
+  <a
+    href="#brand-intro"
+    class="absolute bottom-8 left-1/2 -translate-x-1/2 text-ivory/70 hover:text-ivory transition-colors"
+    aria-label="Scroll down"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.25"
+      class="animate-bounce-slow"
+    >
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </a>
+</section>
+
+<style>
+  @keyframes bounceSlow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+  .animate-bounce-slow {
+    animation: bounceSlow 2.4s ease-in-out infinite;
+  }
+</style>

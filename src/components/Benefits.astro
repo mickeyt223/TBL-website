@@ -1,0 +1,88 @@
+---
+import { siteContent } from '../content/site';
+const { benefits } = siteContent;
+---
+
+<section id="benefits" class="section">
+  <div class="container-edge">
+    <div class="text-center max-w-2xl mx-auto">
+      <p class="eyebrow eyebrow-divider">{benefits.eyebrow}</p>
+      <h2 class="headline headline-section mt-8">{benefits.sectionHeadline}</h2>
+    </div>
+
+    <div class="mt-16 md:mt-20 grid gap-10 md:gap-8 md:grid-cols-3">
+      {
+        benefits.items.map((item) => (
+          <article class="group">
+            <button
+              type="button"
+              class="relative block w-full aspect-[4/5] overflow-hidden focus:outline-none"
+              data-before-after
+              aria-label={`Toggle before and after for ${item.headline}`}
+            >
+              <img
+                src={item.beforeImage}
+                alt={`${item.headline} — before`}
+                class="absolute inset-0 h-full w-full object-cover transition-opacity duration-[400ms] ease-out opacity-100 group-hover:opacity-0"
+                data-before
+                loading="lazy"
+                decoding="async"
+              />
+              <img
+                src={item.afterImage}
+                alt={`${item.headline} — after`}
+                class="absolute inset-0 h-full w-full object-cover transition-opacity duration-[400ms] ease-out opacity-0 group-hover:opacity-100"
+                data-after
+                loading="lazy"
+                decoding="async"
+              />
+              <div
+                class="absolute inset-0 pointer-events-none"
+                style="background: linear-gradient(180deg, rgba(10,10,10,0) 60%, rgba(10,10,10,0.55) 100%);"
+              ></div>
+              <span
+                class="absolute bottom-4 left-4 font-body text-[10px] uppercase tracking-eyebrow text-ivory/90 bg-background/60 px-2 py-1"
+                data-label
+              >
+                Before / After
+              </span>
+            </button>
+
+            <div class="mt-6">
+              <p class="eyebrow">{item.eyebrow}</p>
+              <h3 class="headline text-2xl md:text-[28px] leading-[1.15] mt-3">
+                {item.headline}
+              </h3>
+              <p class="body-copy mt-4 text-base">{item.body}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  // Tap-to-toggle on touch devices — flips opacity classes on the before image
+  const items = document.querySelectorAll('[data-before-after]');
+  items.forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const before = el.querySelector('[data-before]') as HTMLElement | null;
+      const after = el.querySelector('[data-after]') as HTMLElement | null;
+      if (!before || !after) return;
+      const isShowingAfter = before.classList.contains('opacity-0');
+      if (isShowingAfter) {
+        before.classList.remove('opacity-0');
+        before.classList.add('opacity-100');
+        after.classList.remove('opacity-100');
+        after.classList.add('opacity-0');
+      } else {
+        before.classList.remove('opacity-100');
+        before.classList.add('opacity-0');
+        after.classList.remove('opacity-0');
+        after.classList.add('opacity-100');
+      }
+    });
+  });
+</script>

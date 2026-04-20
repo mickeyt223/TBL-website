@@ -1,0 +1,101 @@
+---
+import { siteContent } from '../content/site';
+const { testimonials } = siteContent;
+---
+
+<section id="testimonials" class="section-tight border-y border-ivory/5">
+  <div class="container-edge">
+    <div class="max-w-3xl mx-auto text-center" data-testimonial-carousel>
+      <p class="eyebrow eyebrow-divider">WHAT CLIENTS SAY</p>
+
+      <div class="relative mt-10 min-h-[180px] md:min-h-[160px]">
+        {
+          testimonials.map((t, i) => (
+            <div
+              class="absolute inset-0 transition-opacity duration-500 ease-out"
+              data-slide={i}
+              style={i === 0 ? 'opacity:1;' : 'opacity:0; pointer-events:none;'}
+            >
+              <blockquote class="font-body italic text-xl md:text-2xl text-ivory leading-relaxed">
+                &ldquo;{t.quote}&rdquo;
+              </blockquote>
+              <cite class="block not-italic mt-6 font-body text-xs uppercase tracking-eyebrow text-brass">
+                — {t.author}
+              </cite>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="mt-10 flex justify-center gap-3">
+        {
+          testimonials.map((_, i) => (
+            <button
+              type="button"
+              class="h-2 w-2 rounded-full bg-ivory/30 hover:bg-ivory/60 transition-colors"
+              data-dot={i}
+              aria-label={`Show testimonial ${i + 1}`}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector('[data-testimonial-carousel]');
+  if (root) {
+    const slides = Array.from(root.querySelectorAll('[data-slide]')) as HTMLElement[];
+    const dots = Array.from(root.querySelectorAll('[data-dot]')) as HTMLButtonElement[];
+    let current = 0;
+    let timer: number | undefined;
+    const INTERVAL = 7000;
+
+    function show(i: number) {
+      current = ((i % slides.length) + slides.length) % slides.length;
+      slides.forEach((s, idx) => {
+        if (idx === current) {
+          s.style.opacity = '1';
+          s.style.pointerEvents = 'auto';
+        } else {
+          s.style.opacity = '0';
+          s.style.pointerEvents = 'none';
+        }
+      });
+      dots.forEach((d, idx) => {
+        if (idx === current) {
+          d.classList.add('bg-ivory');
+          d.classList.remove('bg-ivory/30');
+        } else {
+          d.classList.remove('bg-ivory');
+          d.classList.add('bg-ivory/30');
+        }
+      });
+    }
+
+    function start() {
+      stop();
+      timer = window.setInterval(() => show(current + 1), INTERVAL);
+    }
+    function stop() {
+      if (timer) {
+        window.clearInterval(timer);
+        timer = undefined;
+      }
+    }
+
+    dots.forEach((d, i) =>
+      d.addEventListener('click', () => {
+        show(i);
+        start();
+      }),
+    );
+
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+
+    show(0);
+    start();
+  }
+</script>

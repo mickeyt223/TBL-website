@@ -1,0 +1,145 @@
+---
+import { siteContent } from '../content/site';
+
+const { business, nav, hero } = siteContent;
+---
+
+<header
+  id="site-header"
+  class="fixed top-0 inset-x-0 z-50 transition-colors duration-300"
+  data-header
+>
+  <div class="container-edge flex items-center justify-between py-5 md:py-6">
+    <a href="#top" class="flex items-center gap-3 group">
+      <span class="font-display text-lg md:text-xl text-ivory tracking-wide">
+        {business.name}
+      </span>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-8" aria-label="Primary">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="font-body text-xs uppercase tracking-eyebrow text-ivory/80 hover:text-ivory transition-colors"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a href={hero.ctaHref} class="btn-primary">
+        {hero.ctaText}
+      </a>
+    </nav>
+
+    <button
+      type="button"
+      class="lg:hidden text-ivory p-2 -mr-2"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      data-menu-toggle
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        class="block"
+        data-icon-open
+      >
+        <line x1="3" y1="7" x2="21" y2="7" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="17" x2="21" y2="17" />
+      </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        class="hidden"
+        data-icon-close
+      >
+        <line x1="5" y1="5" x2="19" y2="19" />
+        <line x1="19" y1="5" x2="5" y2="19" />
+      </svg>
+    </button>
+  </div>
+
+  <div
+    class="lg:hidden hidden bg-background/95 backdrop-blur-sm border-t border-ivory/10"
+    data-mobile-menu
+  >
+    <nav class="container-edge py-8 flex flex-col gap-6" aria-label="Mobile">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="font-body text-sm uppercase tracking-eyebrow text-ivory"
+            data-mobile-link
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a
+        href={hero.ctaHref}
+        class="btn-primary w-full"
+        data-mobile-link
+      >
+        {hero.ctaText}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<span id="top" class="sr-only"></span>
+
+<script>
+  const header = document.querySelector('[data-header]') as HTMLElement | null;
+  const toggle = document.querySelector('[data-menu-toggle]') as HTMLButtonElement | null;
+  const menu = document.querySelector('[data-mobile-menu]') as HTMLElement | null;
+  const iconOpen = document.querySelector('[data-icon-open]') as HTMLElement | null;
+  const iconClose = document.querySelector('[data-icon-close]') as HTMLElement | null;
+  const mobileLinks = document.querySelectorAll('[data-mobile-link]');
+
+  function setHeaderScrolled() {
+    if (!header) return;
+    if (window.scrollY > 40) {
+      header.classList.add('bg-background/95', 'backdrop-blur-sm', 'border-b', 'border-ivory/10');
+    } else {
+      header.classList.remove('bg-background/95', 'backdrop-blur-sm', 'border-b', 'border-ivory/10');
+    }
+  }
+
+  setHeaderScrolled();
+  window.addEventListener('scroll', setHeaderScrolled, { passive: true });
+
+  function closeMenu() {
+    if (!menu || !toggle) return;
+    menu.classList.add('hidden');
+    toggle.setAttribute('aria-expanded', 'false');
+    iconOpen?.classList.remove('hidden');
+    iconClose?.classList.add('hidden');
+  }
+
+  toggle?.addEventListener('click', () => {
+    if (!menu) return;
+    const isOpen = !menu.classList.contains('hidden');
+    if (isOpen) {
+      closeMenu();
+    } else {
+      menu.classList.remove('hidden');
+      toggle.setAttribute('aria-expanded', 'true');
+      iconOpen?.classList.add('hidden');
+      iconClose?.classList.remove('hidden');
+    }
+  });
+
+  mobileLinks.forEach((link) => link.addEventListener('click', closeMenu));
+</script>
