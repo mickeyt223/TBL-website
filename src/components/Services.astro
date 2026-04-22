@@ -3,19 +3,19 @@ import { siteContent } from '../content/site';
 const { services } = siteContent;
 ---
 
-<section id="services" class="section">
+<section id="services" class="pt-1 md:pt-2 pb-10 md:pb-14">
   <div class="container-edge">
     <div class="text-center max-w-2xl mx-auto">
       <p class="eyebrow eyebrow-divider">WHAT WE DO</p>
-      <h2 class="headline headline-section mt-8">Every detail, handled.</h2>
+      <h2 class="headline text-3xl md:text-4xl lg:text-5xl mt-4 md:mt-6">Every detail, handled.</h2>
     </div>
 
-    <div class="mt-16 md:mt-20 grid gap-10 md:grid-cols-3">
+    <div class="mt-8 md:mt-10 grid gap-6 md:gap-8 md:grid-cols-3">
       {
         services.map((s) => (
           <article class="group">
             <a href={s.href} class="block overflow-hidden">
-              <div class="aspect-[4/5] overflow-hidden">
+              <div class="aspect-video overflow-hidden">
                 <img
                   src={s.image}
                   alt={s.title}
@@ -25,13 +25,13 @@ const { services } = siteContent;
                 />
               </div>
             </a>
-            <div class="mt-6">
+            <div class="mt-4">
               <p class="eyebrow">{s.eyebrow}</p>
-              <h3 class="headline text-2xl md:text-[28px] leading-[1.15] mt-3">
+              <h3 class="headline text-xl md:text-2xl leading-[1.15] mt-2">
                 {s.title}
               </h3>
-              <p class="body-copy mt-4 text-base">{s.blurb}</p>
-              <a href={s.href} class="link-underline mt-6 inline-block">
+              <p class="body-copy mt-2 text-sm md:text-base">{s.blurb}</p>
+              <a href={s.href} class="link-underline mt-3 inline-block">
                 Learn more
               </a>
             </div>

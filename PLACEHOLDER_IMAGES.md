@@ -10,15 +10,16 @@ If you ever want to rename a file, also update the matching path in `src/content
 |---|---|---|
 | `hero.jpg` | Top of page, full-bleed background | Dramatic night exterior of a lit home or yard — wide crop |
 | `gallery-1.jpg` — `gallery-8.jpg` | Gallery carousel | 8 varied night shots: pool, pathway, pergola, dining, uplighting, etc. |
-| `benefit-1-before.jpg` / `benefit-1-after.jpg` | "Spend more evenings outside" card | Same outdoor space, unlit vs. lit |
-| `benefit-2-before.jpg` / `benefit-2-after.jpg` | "Showcase your home's best features" | Same home, unlit vs. lit façade |
-| `benefit-3-before.jpg` / `benefit-3-after.jpg` | "Protect your investment" | Same path/entry, dark vs. lit |
+| `benefit-1.jpg` | "Spend more evenings outside" card | Lit outdoor space at night |
+| `benefit-2.jpg` | "Showcase your home's best features" card | Lit home façade at night |
+| `benefit-3.jpg` | "Protect your investment" card | Softly lit pathway / entry at night |
 | `service-design.jpg` | Design service card | Design-focused — drawings, site visit, planning |
 | `service-install.jpg` | Installation service card | Crew working / installing fixtures |
 | `service-maintenance.jpg` | Maintenance service card | Fixtures being cleaned / tuned at dusk |
 | `philosophy-1.jpg` | Philosophy section, top image | Close-up detail shot |
 | `philosophy-2.jpg` | Philosophy section, bottom image | Portrait / crew / owner |
 | `final-cta.jpg` | "Light the way" band | Cinematic wide shot, room for overlaid copy |
+| `holiday-1.jpg` — `holiday-4.jpg` | Holiday Lighting section background — 4-image crossfading slideshow | 4 different homes with permanent or seasonal holiday lighting at night, wide cinematic crops. Each image displays for 5 seconds then fades to the next. **Currently duplicated from gallery images — swap each with real holiday-lit photos as they become available.** |
 
 ## Image specs
 

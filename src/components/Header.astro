@@ -6,26 +6,83 @@ const { business, nav, hero } = siteContent;
 
 <header
   id="site-header"
-  class="fixed top-0 inset-x-0 z-50 transition-colors duration-300"
+  class="fixed top-0 inset-x-0 z-50 bg-navy border-b border-ivory/10"
   data-header
 >
-  <div class="container-edge flex items-center justify-between py-5 md:py-6">
-    <a href="#top" class="flex items-center gap-3 group">
-      <span class="font-display text-lg md:text-xl text-ivory tracking-wide">
-        {business.name}
-      </span>
+  <div class="container-edge flex items-center justify-between py-2 md:py-3">
+    <a href="#top" class="flex items-center gap-3 group" aria-label={business.name}>
+      {
+        business.logo ? (
+          <img
+            src={business.logo}
+            alt={business.logoAlt ?? business.name}
+            class="h-9 md:h-11 lg:h-12 w-auto"
+            width="330"
+            height="48"
+            loading="eager"
+            decoding="async"
+          />
+        ) : (
+          <span class="font-display text-lg md:text-xl text-ivory tracking-wide">
+            {business.name}
+          </span>
+        )
+      }
     </a>
 
     <nav class="hidden lg:flex items-center gap-8" aria-label="Primary">
       {
-        nav.map((item) => (
-          <a
-            href={item.href}
-            class="font-body text-xs uppercase tracking-eyebrow text-ivory/80 hover:text-ivory transition-colors"
-          >
-            {item.label}
-          </a>
-        ))
+        nav.map((item) =>
+          'children' in item && item.children ? (
+            <div class="relative" data-dropdown>
+              <button
+                type="button"
+                class="flex items-center gap-1.5 font-body text-xs uppercase tracking-eyebrow text-ivory/80 hover:text-ivory transition-colors"
+                aria-expanded="false"
+                aria-haspopup="true"
+                data-dropdown-toggle
+              >
+                {item.label}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  class="transition-transform duration-200"
+                  data-dropdown-chevron
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              <div
+                class="absolute top-full left-1/2 -translate-x-1/2 pt-3 hidden"
+                data-dropdown-menu
+              >
+                <div class="min-w-[220px] bg-navy border border-ivory/10">
+                  {item.children.map((sub) => (
+                    <a
+                      href={sub.href}
+                      class="block px-5 py-3 font-body text-xs uppercase tracking-eyebrow text-ivory/80 hover:text-ivory hover:bg-ivory/5 transition-colors"
+                      data-dropdown-link
+                    >
+                      {sub.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <a
+              href={item.href}
+              class="font-body text-xs uppercase tracking-eyebrow text-ivory/80 hover:text-ivory transition-colors"
+            >
+              {item.label}
+            </a>
+          )
+        )
       }
       <a href={hero.ctaHref} class="btn-primary">
         {hero.ctaText}
@@ -72,20 +129,39 @@ const { business, nav, hero } = siteContent;
   </div>
 
   <div
-    class="lg:hidden hidden bg-background/95 backdrop-blur-sm border-t border-ivory/10"
+    class="lg:hidden hidden bg-navy border-t border-ivory/10"
     data-mobile-menu
   >
     <nav class="container-edge py-8 flex flex-col gap-6" aria-label="Mobile">
       {
-        nav.map((item) => (
-          <a
-            href={item.href}
-            class="font-body text-sm uppercase tracking-eyebrow text-ivory"
-            data-mobile-link
-          >
-            {item.label}
-          </a>
-        ))
+        nav.map((item) =>
+          'children' in item && item.children ? (
+            <div class="flex flex-col gap-4">
+              <p class="font-body text-sm uppercase tracking-eyebrow text-ivory/60">
+                {item.label}
+              </p>
+              <div class="flex flex-col gap-3 pl-4 border-l border-ivory/15">
+                {item.children.map((sub) => (
+                  <a
+                    href={sub.href}
+                    class="font-body text-sm uppercase tracking-eyebrow text-ivory"
+                    data-mobile-link
+                  >
+                    {sub.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <a
+              href={item.href}
+              class="font-body text-sm uppercase tracking-eyebrow text-ivory"
+              data-mobile-link
+            >
+              {item.label}
+            </a>
+          )
+        )
       }
       <a
         href={hero.ctaHref}
@@ -101,26 +177,13 @@ const { business, nav, hero } = siteContent;
 <span id="top" class="sr-only"></span>
 
 <script>
-  const header = document.querySelector('[data-header]') as HTMLElement | null;
   const toggle = document.querySelector('[data-menu-toggle]') as HTMLButtonElement | null;
   const menu = document.querySelector('[data-mobile-menu]') as HTMLElement | null;
   const iconOpen = document.querySelector('[data-icon-open]') as HTMLElement | null;
   const iconClose = document.querySelector('[data-icon-close]') as HTMLElement | null;
   const mobileLinks = document.querySelectorAll('[data-mobile-link]');
 
-  function setHeaderScrolled() {
-    if (!header) return;
-    if (window.scrollY > 40) {
-      header.classList.add('bg-background/95', 'backdrop-blur-sm', 'border-b', 'border-ivory/10');
-    } else {
-      header.classList.remove('bg-background/95', 'backdrop-blur-sm', 'border-b', 'border-ivory/10');
-    }
-  }
-
-  setHeaderScrolled();
-  window.addEventListener('scroll', setHeaderScrolled, { passive: true });
-
-  function closeMenu() {
+  function closeMobileMenu() {
     if (!menu || !toggle) return;
     menu.classList.add('hidden');
     toggle.setAttribute('aria-expanded', 'false');
@@ -132,7 +195,7 @@ const { business, nav, hero } = siteContent;
     if (!menu) return;
     const isOpen = !menu.classList.contains('hidden');
     if (isOpen) {
-      closeMenu();
+      closeMobileMenu();
     } else {
       menu.classList.remove('hidden');
       toggle.setAttribute('aria-expanded', 'true');
@@ -141,5 +204,80 @@ const { business, nav, hero } = siteContent;
     }
   });
 
-  mobileLinks.forEach((link) => link.addEventListener('click', closeMenu));
+  mobileLinks.forEach((link) => link.addEventListener('click', closeMobileMenu));
+
+  // Desktop dropdowns: click + hover, with click-outside to close
+  const dropdowns = Array.from(document.querySelectorAll('[data-dropdown]')) as HTMLElement[];
+
+  function closeAllDropdowns(except?: HTMLElement) {
+    dropdowns.forEach((d) => {
+      if (d === except) return;
+      const m = d.querySelector('[data-dropdown-menu]') as HTMLElement | null;
+      const b = d.querySelector('[data-dropdown-toggle]') as HTMLButtonElement | null;
+      const c = d.querySelector('[data-dropdown-chevron]') as HTMLElement | null;
+      m?.classList.add('hidden');
+      b?.setAttribute('aria-expanded', 'false');
+      c?.style.removeProperty('transform');
+    });
+  }
+
+  dropdowns.forEach((dd) => {
+    const btn = dd.querySelector('[data-dropdown-toggle]') as HTMLButtonElement;
+    const panel = dd.querySelector('[data-dropdown-menu]') as HTMLElement;
+    const chevron = dd.querySelector('[data-dropdown-chevron]') as HTMLElement | null;
+    let closeTimer: number | undefined;
+
+    function cancelClose() {
+      if (closeTimer) {
+        window.clearTimeout(closeTimer);
+        closeTimer = undefined;
+      }
+    }
+    function openDropdown() {
+      cancelClose();
+      closeAllDropdowns(dd);
+      panel.classList.remove('hidden');
+      btn.setAttribute('aria-expanded', 'true');
+      if (chevron) chevron.style.transform = 'rotate(180deg)';
+    }
+    function closeDropdown() {
+      panel.classList.add('hidden');
+      btn.setAttribute('aria-expanded', 'false');
+      if (chevron) chevron.style.removeProperty('transform');
+    }
+    function scheduleClose() {
+      cancelClose();
+      closeTimer = window.setTimeout(closeDropdown, 200);
+    }
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = !panel.classList.contains('hidden');
+      if (isOpen) closeDropdown();
+      else openDropdown();
+    });
+
+    dd.addEventListener('mouseenter', openDropdown);
+    dd.addEventListener('mouseleave', scheduleClose);
+
+    // Close after picking a sub-link
+    panel.querySelectorAll('[data-dropdown-link]').forEach((link) =>
+      link.addEventListener('click', closeDropdown),
+    );
+  });
+
+  // Click outside any dropdown closes them all
+  document.addEventListener('click', (e) => {
+    const target = e.target as Node;
+    const insideAny = dropdowns.some((d) => d.contains(target));
+    if (!insideAny) closeAllDropdowns();
+  });
+
+  // Esc closes everything
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeAllDropdowns();
+      closeMobileMenu();
+    }
+  });
 </script>

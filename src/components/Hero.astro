@@ -7,7 +7,7 @@ const { hero } = siteContent;
   id="hero"
   class="relative min-h-[100svh] flex items-center justify-center overflow-hidden"
 >
-  <div class="absolute inset-0 -z-10">
+  <div class="absolute inset-0 z-0">
     <img
       src={hero.backgroundImage}
       alt=""
@@ -18,12 +18,12 @@ const { hero } = siteContent;
     />
     <div
       class="absolute inset-0"
-      style="background: linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.35) 35%, rgba(10,10,10,0.75) 100%);"
+      style="background: linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.55) 40%, rgba(10,10,10,0.8) 100%);"
     >
     </div>
   </div>
 
-  <div class="container-edge relative text-center pt-32 pb-20">
+  <div class="container-edge relative z-10 text-center pt-32 pb-20">
     <p class="eyebrow eyebrow-divider">{hero.eyebrow}</p>
     <h1 class="headline headline-hero mt-8 max-w-4xl mx-auto">
       {hero.headline}

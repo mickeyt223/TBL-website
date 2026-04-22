@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         background: '#0A0A0A',
+        navy: '#0C2340',
         teal: {
           DEFAULT: '#20566E',
           hover: '#2B7090',

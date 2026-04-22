@@ -8,9 +8,70 @@ interface Props {
 }
 
 const {
-  title = `${siteContent.business.name} — ${siteContent.business.tagline}`,
-  description = siteContent.hero.subhead,
+  title = siteContent.seo.title,
+  description = siteContent.seo.description,
 } = Astro.props;
+
+const { seo, business, services, holidayLighting } = siteContent;
+const canonical = new URL(Astro.url.pathname, seo.siteUrl).toString();
+const ogImage = new URL('/images/hero.jpg', seo.siteUrl).toString();
+
+// LocalBusiness JSON-LD structured data:tells Google what kind of business
+// this is, where you serve, what you offer, and how to reach you.
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': seo.siteUrl,
+  name: business.name,
+  description: seo.description,
+  url: seo.siteUrl,
+  telephone: business.phone,
+  email: business.email,
+  image: ogImage,
+  logo: new URL(business.logo, seo.siteUrl).toString(),
+  priceRange: seo.priceRange,
+  address: {
+    '@type': 'PostalAddress',
+    addressRegion: 'GA',
+    addressCountry: 'US',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: seo.geo.latitude,
+    longitude: seo.geo.longitude,
+  },
+  areaServed: seo.areaServed.map((city) => ({
+    '@type': 'City',
+    name: city,
+  })),
+  sameAs: [
+    business.socials.instagram,
+    business.socials.facebook,
+    business.socials.google,
+  ].filter((url) => url && url.startsWith('http')),
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Outdoor & Holiday Lighting Services',
+    itemListElement: [
+      ...services.map((s) => ({
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: `Landscape Lighting ${s.title}`,
+          description: s.blurb,
+        },
+      })),
+      ...holidayLighting.options.map((opt) => ({
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: `${opt.label.charAt(0)}${opt.label.slice(1).toLowerCase()} Holiday Lighting`,
+          description: opt.body,
+        },
+      })),
+    ],
+  },
+};
 ---
 
 <!doctype html>
@@ -19,15 +80,34 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="keywords" content={seo.keywords.join(', ')} />
     <meta name="theme-color" content="#0A0A0A" />
+    <meta name="author" content={business.name} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
 
+    <!-- Geo / local SEO -->
+    <meta name="geo.region" content={seo.geo.region} />
+    <meta name="geo.placename" content={seo.geo.placename} />
+    <meta name="geo.position" content={`${seo.geo.latitude};${seo.geo.longitude}`} />
+    <meta name="ICBM" content={`${seo.geo.latitude}, ${seo.geo.longitude}`} />
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={business.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="/images/hero.jpg" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="en_US" />
 
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Performance hints for fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -36,6 +116,9 @@ const {
     />
 
     <title>{title}</title>
+
+    <!-- LocalBusiness structured data:Google reads this to surface you in local results -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>
   <body class="bg-background text-ivory">
     <a
@@ -51,6 +134,6 @@ const {
 <style is:global>
   html,
   body {
-    background-color: #0a0a0a;
+    background-color: #0A0A0A;
   }
 </style>

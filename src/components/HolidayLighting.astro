@@ -1,0 +1,74 @@
+---
+import { siteContent } from '../content/site';
+const { holidayLighting } = siteContent;
+---
+
+<section
+  id="holiday"
+  class="relative min-h-[70vh] flex items-center overflow-hidden"
+>
+  <div class="absolute inset-0 z-0" data-holiday-bg>
+    {
+      holidayLighting.backgroundImages.map((src, i) => (
+        <img
+          src={src}
+          alt=""
+          class="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1200ms] ease-in-out"
+          style={i === 0 ? 'opacity:1;' : 'opacity:0;'}
+          data-holiday-slide={i}
+          loading="lazy"
+          decoding="async"
+        />
+      ))
+    }
+    <div
+      class="absolute inset-0"
+      style="background: linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.65) 50%, rgba(10,10,10,0.85) 100%);"
+    >
+    </div>
+  </div>
+
+  <div class="container-edge relative z-10 py-20 md:py-24 max-w-4xl">
+    <p class="eyebrow eyebrow-divider">{holidayLighting.eyebrow}</p>
+    <h2 class="headline text-3xl md:text-5xl lg:text-6xl mt-6 max-w-3xl">
+      {holidayLighting.headline}
+    </h2>
+    <p class="body-copy mt-6 text-ivory/85 max-w-2xl">
+      {holidayLighting.body}
+    </p>
+
+    <div class="mt-10 grid sm:grid-cols-2 gap-8 max-w-3xl">
+      {
+        holidayLighting.options.map((opt) => (
+          <div>
+            <p class="eyebrow">{opt.label}</p>
+            <h3 class="headline text-xl md:text-2xl mt-3">{opt.title}</h3>
+            <p class="body-copy mt-3 text-base text-ivory/80">{opt.body}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-10">
+      <a href={holidayLighting.ctaHref} class="btn-primary">
+        {holidayLighting.ctaText}
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const slides = Array.from(
+    document.querySelectorAll('[data-holiday-slide]'),
+  ) as HTMLImageElement[];
+  if (slides.length > 1) {
+    let current = 0;
+    const INTERVAL_MS = 5000;
+    window.setInterval(() => {
+      const next = (current + 1) % slides.length;
+      slides[current].style.opacity = '0';
+      slides[next].style.opacity = '1';
+      current = next;
+    }, INTERVAL_MS);
+  }
+</script>

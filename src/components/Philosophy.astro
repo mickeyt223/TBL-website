@@ -3,7 +3,7 @@ import { siteContent } from '../content/site';
 const { philosophy } = siteContent;
 ---
 
-<section id="philosophy" class="section">
+<section id="philosophy" class="pt-1 md:pt-2 pb-10 md:pb-14">
   <div class="container-edge grid md:grid-cols-2 gap-10 md:gap-16 items-center">
     <div class="grid grid-cols-2 gap-4 md:gap-6 order-2 md:order-1">
       <div class="aspect-[3/4] overflow-hidden">
@@ -31,9 +31,6 @@ const { philosophy } = siteContent;
       <h2 class="headline headline-section mt-8">{philosophy.headline}</h2>
       <div class="mt-6 space-y-4">
         {philosophy.body.map((para) => <p class="body-copy">{para}</p>)}
-      </div>
-      <div class="mt-10">
-        <a href={philosophy.ctaHref} class="btn-primary">{philosophy.ctaText}</a>
       </div>
     </div>
   </div>

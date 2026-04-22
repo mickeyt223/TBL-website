@@ -3,7 +3,7 @@ import { siteContent } from '../content/site';
 const { contact, business } = siteContent;
 ---
 
-<section id="contact" class="section">
+<section id="contact" class="pt-1 md:pt-2 pb-10 md:pb-14">
   <div class="container-edge grid md:grid-cols-2 gap-12 md:gap-16">
     <div class="max-w-md">
       <p class="eyebrow eyebrow-divider">{contact.eyebrow}</p>
@@ -36,33 +36,18 @@ const { contact, business } = siteContent;
       </div>
     </div>
 
-    {/*
-      FORM NOTE FOR THE OWNER:
-      The form below uses a `mailto:` action as a v1 placeholder — submitting will
-      open the user's email app with the form data pre-filled.
-
-      When you're ready for a real backend, swap this in two places:
-
-      1. In `src/content/site.ts`, change `contact.formEndpoint` to a Formspree URL
-         like "https://formspree.io/f/XXXXXXXX".
-      2. In this file, change `method="POST"` (already set) and remove the
-         `enctype="text/plain"` attribute below.
-
-      Formspree setup: https://formspree.io/ → create a new form → copy the endpoint URL.
-    */}
     <form
       action={contact.formEndpoint}
       method="POST"
-      enctype="text/plain"
       class="space-y-6"
     >
       <div>
-        <label for="name" class="form-label">Name</label>
+        <label for="name" class="form-label">Name <span class="text-red-500" aria-hidden="true">*</span></label>
         <input id="name" name="Name" type="text" required class="form-input" />
       </div>
       <div class="grid sm:grid-cols-2 gap-6">
         <div>
-          <label for="email" class="form-label">Email</label>
+          <label for="email" class="form-label">Email <span class="text-red-500" aria-hidden="true">*</span></label>
           <input id="email" name="Email" type="email" required class="form-input" />
         </div>
         <div>
@@ -72,11 +57,53 @@ const { contact, business } = siteContent;
       </div>
       <div>
         <label for="address" class="form-label">Address</label>
-        <input id="address" name="Address" type="text" class="form-input" />
+        <input
+          id="address"
+          name="Address"
+          type="text"
+          autocomplete="street-address"
+          class="form-input"
+        />
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-6">
+        <div class="sm:col-span-2">
+          <label for="city" class="form-label">City</label>
+          <input
+            id="city"
+            name="City"
+            type="text"
+            autocomplete="address-level2"
+            class="form-input"
+          />
+        </div>
+        <div>
+          <label for="state" class="form-label">State</label>
+          <input
+            id="state"
+            name="State"
+            type="text"
+            autocomplete="address-level1"
+            maxlength="2"
+            class="form-input uppercase"
+          />
+        </div>
+        <div>
+          <label for="zip" class="form-label">Zip</label>
+          <input
+            id="zip"
+            name="Zip"
+            type="text"
+            autocomplete="postal-code"
+            inputmode="numeric"
+            pattern="[0-9]{5}(-[0-9]{4})?"
+            maxlength="10"
+            class="form-input"
+          />
+        </div>
       </div>
       <div>
         <label for="project-type" class="form-label">Project type</label>
-        <select id="project-type" name="Project Type" class="form-select" required>
+        <select id="project-type" name="Project Type" class="form-select">
           <option value="">Choose one</option>
           {contact.projectTypes.map((t) => <option value={t}>{t}</option>)}
         </select>
@@ -87,7 +114,7 @@ const { contact, business } = siteContent;
       </div>
       <div class="pt-2">
         <button type="submit" class="btn-primary w-full sm:w-auto">
-          Request a Consultation
+          Submit
         </button>
       </div>
     </form>

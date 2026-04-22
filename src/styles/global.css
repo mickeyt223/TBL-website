@@ -7,6 +7,14 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Offset anchor-link jumps so the fixed header doesn't cover the section top */
+    scroll-padding-top: 60px;
+  }
+  @media (min-width: 768px) {
+    html { scroll-padding-top: 78px; }
+  }
+  @media (min-width: 1024px) {
+    html { scroll-padding-top: 88px; }
   }
 
   body {
@@ -99,11 +107,11 @@
   }
 
   .section {
-    @apply py-20 md:py-24 lg:py-32;
+    @apply py-16 md:py-20 lg:py-24;
   }
 
   .section-tight {
-    @apply py-16 md:py-20;
+    @apply py-12 md:py-16;
   }
 }
 
