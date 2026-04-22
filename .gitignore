@@ -5,6 +5,8 @@ dist
 !.env.example
 .DS_Store
 .astro
+whatusersees.png
+_*.png
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
