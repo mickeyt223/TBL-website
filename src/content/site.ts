@@ -99,7 +99,7 @@ export const siteContent = {
   },
 
   gallery: [
-    { src: "/images/gallery-1.jpg", alt: "Illuminated backyard pool at dusk" },
+    { src: "/images/gallery-1.jpg", alt: "Brick and stone home with warm uplighting at night" },
     { src: "/images/gallery-2.jpg", alt: "Lit pathway through a garden at night" },
     { src: "/images/gallery-3.jpg", alt: "Pergola with warm ambient lighting" },
     { src: "/images/gallery-4.jpg", alt: "Modern home exterior at night" },
@@ -107,6 +107,12 @@ export const siteContent = {
     { src: "/images/gallery-6.jpg", alt: "Accent-lit landscape and architecture" },
     { src: "/images/gallery-7.jpg", alt: "Stone patio with soft ground-level lighting" },
     { src: "/images/gallery-8.jpg", alt: "Tree uplighting across a front yard" },
+    { src: "/images/gallery-9.jpg", alt: "Lakeside dock with blue LED lighting at night" },
+    { src: "/images/gallery-10.jpg", alt: "Pool and spa with blue lighting and landscape uplights" },
+    { src: "/images/gallery-11.jpg", alt: "White farmhouse exterior with soffit and accent lighting" },
+    { src: "/images/gallery-12.jpg", alt: "Deck staircase with recessed step lights" },
+    { src: "/images/gallery-13.jpg", alt: "Tree uplighting around fire pit area" },
+    { src: "/images/gallery-14.jpg", alt: "Holiday string lights draped from large tree" },
   ],
 
   benefits: {
